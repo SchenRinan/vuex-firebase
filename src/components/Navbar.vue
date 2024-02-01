@@ -5,7 +5,7 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav" v-if="authCheck">
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item" v-if="!user">
             <router-link to="/login" class="nav-link">Login</router-link>
@@ -26,13 +26,23 @@ import { useStore } from 'vuex'
 export default {
   setup(){
     const store = useStore()
-    const user = computed(()=>store.state.user)
+    //const user = computed(()=>store.state.user)
+    //const authCheck = computed(()=> store.state.authIsReady) 
+    const user = computed(()=>store.getters.currentUser)
+    const authCheck = computed(()=>store.getters.isAuthenticated)
 
-    const handleLogout = async () =>{
-      await store.dispatch('signOut')
+    //const handleLogout = async () =>{
+    //  await store.dispatch('signOut')
+    //}
+    const handleLogout = async () => {
+      try {
+        await store.dispatch('signOut');
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
     }
 
-    return { handleLogout, user, authCheck: computed(()=> store.state.authIsReady) }
+    return { handleLogout, user, authCheck }
   }
 }
 </script>
