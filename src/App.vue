@@ -1,39 +1,27 @@
 <template>
-  <Navbar :test="test"/>
-  <router-view :test="test"/>
+  <Navbar :user="user" :authIsReady="authIsReady"/>
+  <router-view :user="user" :authIsReady="authIsReady"/>
 </template>
 
 <script>
-import Navbar from './components/Navbar.vue'
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
+import Navbar from './components/Navbar.vue';
 
 export default {
   name: 'App',
   components: { Navbar },
-  data(){
-    return {test: 'banana'}
-  }
+  setup() {
+    const store = useStore();
+    const user = computed(() => store.state.user);
+    const authIsReady = computed(() => store.state.authIsReady);
+
+    return { user, authIsReady };
+  },
 }
 </script>
 
 <style>
-/* #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-} */
 </style>
